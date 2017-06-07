@@ -1,0 +1,289 @@
+// =============================================================================
+// Mixins
+// =============================================================================
+
+// String Replace
+@function str-replace($string, $search, $replace: "") {
+	$index: str-index($string, $search);
+
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+	}
+
+	@return $string;
+}
+
+// Font Face
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
+	$src: null;
+
+	$extmods: (
+		eot: "?",
+		svg: "#" + str-replace($name, " ", "_")
+	);
+
+	$formats: (
+		otf: "opentype",
+		ttf: "truetype"
+	);
+
+	@each $ext in $exts {
+		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+		$src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+	}
+
+	@font-face {
+		font-family: quote($name);
+		font-style: $style;
+		font-weight: $weight;
+		src: $src;
+	}
+}
+
+// =============================================================================
+// Settings
+// =============================================================================
+
+// Fonts load
+@include font-face(CabinBold, '../fonts/cabin-bold-webfont');
+@include font-face(CabinRegular, '../fonts/cabin-regular-webfont');
+@include font-face(NoveBook, '../fonts/novecentowide-book-webfont');
+@include font-face(NoveNormal, '../fonts/novecentowide-normal-webfont');
+
+// Fonts vars
+$cabin_bold: CabinBold;
+$cabin_regular: CabinRegular;
+$nove_book: NoveBook;
+$nove_normal: NoveNormal;
+
+// Breakpoints
+$bp_small: 480px;
+$bp_medium: 768px;
+$bp_large: 1024px;
+
+// =============================================================================
+// Base
+// =============================================================================
+
+// bower:scss
+// endbower
+
+* {
+  box-sizing: border-box;
+}
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  height: 214px;
+  background-color: gray;
+}
+
+.footer {
+  height: 497px;
+  background-color: gray;
+}
+
+
+// =============================================================================
+// Custom
+// =============================================================================
+
+// utils
+.auto {
+  width: 96%;
+  max-width: 1400px;
+  margin: auto;
+
+  overflow: hidden;
+}
+
+.u-pull-right {
+  float: right;
+}
+
+.u-pull-left {
+  float: left;
+}
+
+.u-imgresponsive {
+  display: block;
+  max-width: 100%;
+}
+
+// Product container
+.product {
+  display: table;
+  width: 100%;
+
+  font-size: 16px;
+
+  &__content {
+    display: table;
+    height: 100vh;
+
+    color: white;
+
+    @media (min-width: $bp_medium) {
+      display: block;
+    }
+  }
+
+  &__inner {
+    vertical-align: middle;
+
+    display: table-cell;
+    height: 100%;
+
+    @media (min-width: $bp_medium) {
+      display: table;
+    }
+  }
+
+  &__col {
+    display: table;
+    padding: 1em;
+    width: 100%;
+
+    @media (min-width: $bp_medium) {
+      width: 50%;
+      height: 100vh;
+    }
+
+    &-inner {
+      vertical-align: middle;
+
+      display: table-cell;
+    }
+
+    &--right {
+      @media (min-width: $bp_medium) {
+        float: right;
+      }
+    }
+
+    &--left {
+      @media (min-width: $bp_medium) {
+        float: left;
+      }
+    }
+  }
+
+  &__header {
+    font-family: $nove_book;
+    line-height: 1;
+  }
+
+  &__brand {
+    margin: 0;
+
+    font-size: 1.5em;
+
+    @media (min-width: $bp_small) {
+      font-size: 2em
+    }
+
+    @media (min-width: $bp_medium) {
+      font-size: 3em
+    }
+
+    @media (min-width: $bp_large) {
+      font-size: 4em
+    }
+  }
+
+  &__type {
+    margin: 0;
+
+    font-size: 2em;
+
+    @media (min-width: $bp_small) {
+      font-size: 3em
+    }
+
+    @media (min-width: $bp_medium) {
+      font-size: 4em
+    }
+
+    @media (min-width: $bp_large) {
+      font-size: 5em
+    }
+  }
+
+  &__desc {
+    font-family: $cabin_regular;
+    font-size: 0.9em;
+
+    @media (min-width: $bp_medium) {
+      font-size: 1em;
+    }
+
+    @media (min-width: $bp_large) {
+      font-size: 1.25em;
+    }
+  }
+
+  &__seemore {
+    font-family: $nove_normal;
+    font-size: 0.8em;
+
+    color: white;
+
+    @media (min-width: $bp_medium) {
+      font-size: 1em;
+    }
+
+    &:before {
+      content: '+';
+
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      margin-right: 0.5em;
+
+      line-height: 1.1em;
+      text-align: center;
+
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+  }
+
+  &__fig {
+    display: block;
+    margin: 0;
+
+    text-align: center;
+
+    @media (min-width: $bp_medium) {
+      display: inline-block;
+
+      text-align: left;
+    }
+
+    img {
+      display: inline-block;
+
+      @media (min-width: $bp_medium) {
+        display: block;
+      }
+    }
+  }
+}

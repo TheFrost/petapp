@@ -1,0 +1,25 @@
+<div class="product" ng-repeat="product in main.listProducts" ng-style="{'background-color': product.backgroundColor}">
+  <div class="product__content auto">
+    <div class="product__inner">
+      <div class="product__col product__col--right">
+        <div class="product__col-inner">
+          <figure class="product__fig">
+            <img src="images/products/extra-care-4.png" alt="" class="u-imgresponsive">
+          </figure>
+        </div>
+      </div>
+      <div class="product__col product__col--left">
+        <div class="product__col-inner">
+          <header class="product__header">
+            <h1 class="product__brand">Pétalo</h1>
+            <h2 class="product__type" ng-bind="product.title"></h2>
+          </header>
+          <p class="product__desc" ng-bind="product.extract"></p>
+          <footer class="product__footer">
+            <a ng-href="#!/detalle/{{product.slug}}" class="product__seemore">ver más</a>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
